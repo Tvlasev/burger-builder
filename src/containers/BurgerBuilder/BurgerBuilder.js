@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import Wrapp from '../../hoc/Wrapp';
 import Burger from '../../components/Burger/Burger';
@@ -21,16 +21,17 @@ class BurgerBuilder extends Component {
     //     this.state = {...}
     // }
     state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0
-        },
+        ingredients: null,
         totalPrice: 4,
         purchasable: false,
         purchasing: false,
         loading: false
+    }
+
+    componentDidMount () {
+        axios.get("https://burger-builder-8e789.firebaseio.com/ingredients.json")
+            .then(res => this.setState({ ingredients: res.data }))
+            .catch(e => console.log(e))
     }
 
     updatePurchaseState (ingredients) {
@@ -109,7 +110,7 @@ class BurgerBuilder extends Component {
     }
 
     render () {
-        const { loading } = this.state
+        const { loading, ingredients } = this.state
         const disabledInfo = {
             ...this.state.ingredients
         };
@@ -121,7 +122,7 @@ class BurgerBuilder extends Component {
             <Wrapp>
                 <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
                 {
-                    loading
+                    loading || !ingredients
                     ? <Spinner />
                     : <OrderSummary
                     ingredients={this.state.ingredients}
@@ -130,14 +131,21 @@ class BurgerBuilder extends Component {
                     purchaseContinued={this.purchaseContinueHandler} />
                 }
                 </Modal>
-                <Burger ingredients={this.state.ingredients} />
-                <BuildControls
-                    ingredientAdded={this.addIngredientHandler}
-                    ingredientRemoved={this.removeIngredientHandler}
-                    disabled={disabledInfo}
-                    purchasable={this.state.purchasable}
-                    ordered={this.purchaseHandler}
-                    price={this.state.totalPrice} />
+                {
+                    ingredients !== null
+                    ? <Fragment>
+                        <Burger ingredients={this.state.ingredients} />
+                        <BuildControls
+                            ingredientAdded={this.addIngredientHandler}
+                            ingredientRemoved={this.removeIngredientHandler}
+                            disabled={disabledInfo}
+                            purchasable={this.state.purchasable}
+                            ordered={this.purchaseHandler}
+                            price={this.state.totalPrice} 
+                        />
+                    </Fragment>
+                    : <Spinner />
+                }
             </Wrapp>
         );
     }

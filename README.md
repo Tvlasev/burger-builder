@@ -6,6 +6,6 @@ The project is created with npm create-react-app
 
 to run the project:
 
-1. Clone this repositort
+1. Clone this repository
 2. run npm install to install all node_modules folder
 3. run npm start to run the project on port 3000

@@ -1,20 +1,11 @@
-.checkoutSummary {
+.CheckoutSummary {
   text-align: center;
-  width: 70%;
+  width: 80%;
   margin: auto;
-}
-
-.burgerContainer {
-  margin: auto;
-  width: 100%;
-  height: 250px;
 }
 
 @media (min-width: 600px) {
-  .checkoutSummary {
-    width: 500px;
-  }
-  .burgerContainer {
-    height: 400px;
+  .CheckoutSummary {
+      width: 500px;
   }
 }

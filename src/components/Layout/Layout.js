@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Wrapp from '../../hoc/Wrapp';
 import classes from './Layout.css';
@@ -21,10 +22,12 @@ class Layout extends Component {
     }
 
     render () {
+        const { isAuth } = this.props
         return (
             <Wrapp>
-                <Toolbar drawerToggleClicked={this.sideDrawerToggleHandler} />
+                <Toolbar isAuth={isAuth} drawerToggleClicked={this.sideDrawerToggleHandler} />
                 <SideDrawer
+                    isAuth={isAuth}
                     open={this.state.showSideDrawer}
                     closed={this.sideDrawerClosedHandler} />
                 <main className={classes.Content}>
@@ -35,4 +38,10 @@ class Layout extends Component {
     }
 }
 
-export default Layout;
+const mapStateToProps = state => {
+    return {
+        isAuth: state.auth.token !== null
+    }
+}
+
+export default connect(mapStateToProps, null)(Layout);
